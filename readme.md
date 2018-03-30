@@ -46,8 +46,8 @@ Is caused by graphql when several dependencies load different versions of graphq
 
 Remove dependencies that `npm ls graphql` surfaced as using graphql:
 
-- graphiql (necessary?)
-- postgraphile (necessary?)
+- graphiql
+- postgraphile
 
 Then got `extraneous` message :-(
 
