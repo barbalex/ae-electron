@@ -18,7 +18,7 @@ Inspired by [React Bits](https://www.youtube.com/watch?v=JrARTsX2RM0).
 - Follow https://www.youtube.com/watch?v=JrARTsX2RM0, https://github.com/popupbits/react-electron
 - `yarn add @heroku/foreman`, not foreman itself: That has unsolved issues.
 - Add `"extends": null` to the build key in package.json to solve another issue: https://github.com/electron-userland/electron-builder/issues/2030#issuecomment-327155801
-- Set graphQlUri to `https://artdaten.ch/graphql` in modules/graphQlUri
+- Set graphQlUri to `https://artdaten.ch/graphql` in `src/modules/graphQlUri`
 - Do not initiate activeNodeArray from pathname in index.js (as the inital pathname is a file url): uncomment that code.
 - In getActiveNodeArrayFromPathname prepend: `.replace('/C:', '')`, so it ends up as: `window.location.pathname.replace('/C:', '').replace('/', '')`
 - Do not dynamically load chunks, that leads to issues.
@@ -37,7 +37,7 @@ directory. If different versions of "graphql" are the dependencies of other
 relied on modules, use "resolutions" to ensure only one version is installed.
 ```
 
-Is caused by graphql and was solved in version 0.13, see:
+Is caused by graphql when several dependencies load different versions of graphql. Was solved in version 0.13, see:
 
 - https://github.com/graphql/graphql-js/pull/1174#issuecomment-367734844
 - https://github.com/graphql/graphql-js/releases/tag/v0.13.0
