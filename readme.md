@@ -5,7 +5,7 @@ Install [arteigenschaften.ch](http://arteigenschaften.ch) frontend as a local ap
 
 Why?
 
-- Foremost: Because FNS only has access to old browser versions
+- Foremost: Because [FNS](https://naturschutz.zh.ch) only has access to old browser versions
 - Maybe it helps with speed?
 
 ## What is arteigenschaften.ch?
