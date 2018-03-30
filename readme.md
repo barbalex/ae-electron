@@ -40,10 +40,14 @@ and: https://github.com/graphql/graphql-js/releases/tag/v0.13.0
 
 #### Tried solution
 
-- remove graphiql (necessary?)
-- remove postgraphile (necessary?)
+Remove what `npm ls graphql` surfaced:
 
-then got extraneous message
+- graphiql (necessary?)
+- postgraphile (necessary?)
+
+Then got extraneous message :-(
+
+This may not be necessary, as the following seemed to solve the problem:
 
 #### Working solution:
 `yarn add graphql@0.13.0` because this version has solved the problem
