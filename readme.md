@@ -28,7 +28,7 @@ Inspired by [React Bits](https://www.youtube.com/watch?v=JrARTsX2RM0).
 - Maybe remember last window size and position
 - Open links in Browser instead of new electron window?
 
-### Nearly blocking error
+### Nearly blocking issue
 ```bash
 Uncaught Error: Cannot use e "__Schema" from another module or realm.
 
