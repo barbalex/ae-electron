@@ -11,13 +11,13 @@ A tool to collect and work with attributes of species and habitats for any taxon
 ## Technical solution
 [electron](https://electronjs.org) is used to make the create-react-app locally installable.
 
-Inspired by [React Bits](https://www.youtube.com/watch?v=JrARTsX2RM0.)
+Inspired by [React Bits](https://www.youtube.com/watch?v=JrARTsX2RM0).
 
 ### How to convert
 
 - Follow https://www.youtube.com/watch?v=JrARTsX2RM0, https://github.com/popupbits/react-electron
 - `yarn add @heroku/foreman`, not foreman itself: That has unsolved issues.
-- Add `"extends": null` to the build key in package.json, see: https://github.com/electron-userland/electron-builder/issues/2030#issuecomment-327155801
+- Add `"extends": null` to the build key in package.json to solve another issue. See: https://github.com/electron-userland/electron-builder/issues/2030#issuecomment-327155801
 - Set graphQlUri to `https://artdaten.ch/graphql` in modules/graphQlUri
 - Do not initiate activeNodeArray from pathname in index.js (as the inital pathname is a file url): uncomment that code.
 - In getActiveNodeArrayFromPathname prepend: `.replace('/C:', '')`, so it ends up as: `window.location.pathname.replace('/C:', '').replace('/', '')`
