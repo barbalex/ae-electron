@@ -1,12 +1,9 @@
 [![js-standard-style](https://img.shields.io/badge/license-ISC-brightgreen.svg)](https://github.com/barbalex/ae-electron/blob/master/license.md)
 
 ## Basic idea
-Install [arteigenschaften.ch](http://arteigenschaften.ch) frontend as a local app.
+Install the [arteigenschaften.ch](http://arteigenschaften.ch) frontend as a local app.
 
-Why?
-
-- Foremost: Because [FNS](https://naturschutz.zh.ch) only has access to old browser versions
-- Maybe it helps with speed?
+Why? Because [FNS](https://naturschutz.zh.ch) only has access to old browser versions. Maybe it also helps speed things up on the relatively slow computers in FNS.
 
 ## What is arteigenschaften.ch?
 A tool to collect and work with attributes of species and habitats for any taxonomies [(more)](https://github.com/barbalex/ae2/blob/master/readme.md).
@@ -14,22 +11,19 @@ A tool to collect and work with attributes of species and habitats for any taxon
 ## Technical solution
 [electron](https://electronjs.org) is used to make the create-react-app locally installable.
 
-inspired by https://www.youtube.com/watch?v=JrARTsX2RM0, https://github.com/popupbits/react-electron.
+Inspired by [React Bits](https://www.youtube.com/watch?v=JrARTsX2RM0.)
 
 ### How to convert
-`yarn add @heroku/foreman`, not foreman
 
-add `"extends": null` to build key in package.json, see: https://github.com/electron-userland/electron-builder/issues/2030#issuecomment-327155801
-
-set graphQlUri to `https://artdaten.ch/graphql` in modules/graphQlUri
-
-DO NOT initiate activeNodeArray from pathname in index.js: uncomment that code.
-
-In getActiveNodeArrayFromPathname prepend this: `.replace('/C:', '')` for: `window.location.pathname.replace('/C:', '').replace('/', '')`
-
-DO NOT dynamically load chunks
-
-maybe disable service worker?
+- Follow https://www.youtube.com/watch?v=JrARTsX2RM0, https://github.com/popupbits/react-electron
+- `yarn add @heroku/foreman`, not foreman itself: That has unsolved issues.
+- Add `"extends": null` to the build key in package.json, see: https://github.com/electron-userland/electron-builder/issues/2030#issuecomment-327155801
+- Set graphQlUri to `https://artdaten.ch/graphql` in modules/graphQlUri
+- Do not initiate activeNodeArray from pathname in index.js (as the inital pathname is a file url): uncomment that code.
+- In getActiveNodeArrayFromPathname prepend: `.replace('/C:', '')`, so it ends up as: `window.location.pathname.replace('/C:', '').replace('/', '')`
+- Do not dynamically load chunks, that leads to issues.
+- Maybe disable service worker?
+- Create separate readme
 
 ### Nearly blocking error:
 ```bash
