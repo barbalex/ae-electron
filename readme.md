@@ -41,18 +41,18 @@ Is caused by graphql and was solved in version 0.13, see:
 
 #### Tried solution
 
-Remove what `npm ls graphql` surfaced:
+Remove what `npm ls graphql` surfaced as using graphql:
 
 - graphiql (necessary?)
 - postgraphile (necessary?)
 
 Then got extraneous message :-(
 
-This may not be necessary, as the following seemed to solve the problem:
+This may not be necessary, as the following seems to work:
 
 #### Working solution:
-`yarn add graphql@0.13.0` because this version has solved the problem
-add to package.json:
+1. `yarn add graphql@0.13.0` as this version has solved the issue.
+1. add to package.json:
 ```json
   "resolutions": {
     "graphql": "0.13.0"
