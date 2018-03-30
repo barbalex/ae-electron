@@ -58,3 +58,4 @@ This may not be necessary, as the following seems to work:
         "graphql": "0.13.0"
       },
     ```
+    ...which is a yarn method to tackle this kind of problem :-)
