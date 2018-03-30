@@ -1,14 +1,14 @@
 [![js-standard-style](https://img.shields.io/badge/license-ISC-brightgreen.svg)](https://github.com/barbalex/ae-electron/blob/master/license.md)
 
-## Basic idea
+## 1 Basic idea
 Install the [arteigenschaften.ch](http://arteigenschaften.ch) frontend as a local app.
 
 Why? Because [FNS](https://naturschutz.zh.ch) only has access to old browser versions. Maybe it also helps speed things up on the relatively slow computers in FNS.
 
-## What is arteigenschaften.ch?
+## 2 What is arteigenschaften.ch?
 A tool to collect and work with attributes of species and habitats for any taxonomies [(more)](https://github.com/barbalex/ae2/blob/master/readme.md).
 
-## Technical solution
+## 3 Technical solution
 [electron](https://electronjs.org) is used to make the create-react-app locally installable.
 
 Inspired by [React Bits](https://www.youtube.com/watch?v=JrARTsX2RM0).
