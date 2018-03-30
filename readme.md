@@ -34,9 +34,10 @@ directory. If different versions of "graphql" are the dependencies of other
 relied on modules, use "resolutions" to ensure only one version is installed.
 ```
 
-Was solved in graphql version 0.13/0.13.1
-see: https://github.com/graphql/graphql-js/pull/1174#issuecomment-367734844
-and: https://github.com/graphql/graphql-js/releases/tag/v0.13.0
+Is caused by graphql and was solved in version 0.13, see:
+
+- https://github.com/graphql/graphql-js/pull/1174#issuecomment-367734844
+- https://github.com/graphql/graphql-js/releases/tag/v0.13.0
 
 #### Tried solution
 
