@@ -1,7 +1,7 @@
+[![js-standard-style](https://img.shields.io/badge/license-ISC-brightgreen.svg)](https://github.com/barbalex/ae-electron/blob/master/license.md)
+
 ## Basic idea
 Install [arteigenschaften.ch](http://arteigenschaften.ch) frontend as a local app.
-
-[![js-standard-style](https://img.shields.io/badge/license-ISC-brightgreen.svg)](https://github.com/barbalex/ae-electron/blob/master/license.md)
 
 Why?
 
@@ -9,7 +9,7 @@ Why?
 - Maybe it helps with speed?
 
 ## What is arteigenschaften.ch?
-A tool to collect and work with attributes of species and habitats for any taxonomies [(read more)](https://github.com/barbalex/ae2/blob/master/readme.md).
+A tool to collect and work with attributes of species and habitats for any taxonomies [(more)](https://github.com/barbalex/ae2/blob/master/readme.md).
 
 ## Technical solution
 [electron](https://electronjs.org) is used to make the create-react-app locally installable.
