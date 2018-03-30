@@ -44,12 +44,12 @@ Is caused by graphql when several dependencies load different versions of graphq
 
 #### Tried solution
 
-Remove what `npm ls graphql` surfaced as using graphql:
+Remove dependencies that `npm ls graphql` surfaced as using graphql:
 
 - graphiql (necessary?)
 - postgraphile (necessary?)
 
-Then got extraneous message :-(
+Then got `extraneous` message :-(
 
 This may not be necessary, as the following seems to work:
 
