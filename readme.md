@@ -24,6 +24,9 @@ Inspired by [React Bits](https://www.youtube.com/watch?v=JrARTsX2RM0).
 - Do not dynamically load chunks, that leads to issues.
 - Maybe disable service worker?
 - Create separate readme
+- Add app Symbol(s)
+- Maybe remember last window size and position
+- Open links in Browser instead of new electron window?
 
 ### Nearly blocking error:
 ```bash
