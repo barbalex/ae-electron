@@ -3,7 +3,7 @@
 ## 1 Basic idea
 Install the [arteigenschaften.ch](http://arteigenschaften.ch) frontend as a local app.
 
-Why? Because [FNS](https://naturschutz.zh.ch) only has access to old browser versions. Maybe it also helps speed things up on the relatively slow computers in FNS.
+Why? Because [FNS](https://naturschutz.zh.ch) does not have access to modern browsers. It may also helps speed things up on their relatively weak computers.
 
 ## 2 What is arteigenschaften.ch?
 A tool to collect and work with attributes of species and habitats for any taxonomies [(more)](https://github.com/barbalex/ae2/blob/master/readme.md).
