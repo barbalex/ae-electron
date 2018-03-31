@@ -79,6 +79,9 @@
     "appId": "ch.gabriel-software.ae-electron",
     "electronVersion": "1.8.4",
     "files": ["build/**/*", "electron/*"],
-    "extends": null
+    "extends": null,
+    "win": {
+      "icon": "build/favicon256.ico"
+    }
   }
 }
