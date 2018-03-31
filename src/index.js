@@ -17,7 +17,7 @@ import createHistory from 'history/createBrowserHistory'
 import theme from './theme'
 import './index.css'
 import 'react-reflex/styles.css'
-//import registerServiceWorker from './registerServiceWorker'
+import registerServiceWorker from './registerServiceWorker'
 import getActiveNodeArrayFromPathname from './modules/getActiveNodeArrayFromPathname'
 import activeNodeArrayMutation from './modules/activeNodeArrayMutation'
 import initializeIdb from './modules/initializeIdb'
@@ -173,7 +173,7 @@ const launchApp = async () => {
       document.getElementById('root')
     )
 
-    //registerServiceWorker(client)
+    registerServiceWorker(client)
   } catch (error) {
     console.log('Error in index.js: ', error)
   }
