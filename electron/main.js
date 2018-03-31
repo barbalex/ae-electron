@@ -9,9 +9,12 @@ let win
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    // don't use this: window can't be closed:
+    //fullscreen: true,
+    icon: path.join(__dirname, '/../build/favicon.ico'),
   })
+
+  win.maximize()
 
   // uncomment for prod
   //win.openDevTools()
