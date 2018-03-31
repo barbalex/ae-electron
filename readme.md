@@ -22,7 +22,6 @@ Inspired by [React Bits](https://www.youtube.com/watch?v=JrARTsX2RM0).
 - Do not initiate activeNodeArray from pathname in index.js (as the inital pathname is a file url): uncomment that code.
 - In getActiveNodeArrayFromPathname prepend: `.replace('/C:', '')`, so it ends up as: `window.location.pathname.replace('/C:', '').replace('/', '')`
 - Do not dynamically load chunks, that leads to issues.
-- Maybe disable service worker?
 - Create separate readme
 - Add app Icons(s)
 - Maximize window
