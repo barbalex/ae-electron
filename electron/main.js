@@ -9,9 +9,9 @@ let win
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    // don't use this: window can't be closed:
-    //fullscreen: true,
     icon: path.join(__dirname, '/../build/favicon.ico'),
+    // prevent window from showing before it was maximized:
+    show: false,
   })
 
   win.maximize()
