@@ -12,9 +12,7 @@ import groupBy from 'lodash/groupBy'
 import compose from 'recompose/compose'
 
 import RCO from './RCO'
-import ChooseNrOfRows from './ChooseNrOfRows'
 import propsByTaxData from '../propsByTaxData'
-import exportTaxonomiesData from '../../exportTaxonomiesData'
 import data from '../data'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
@@ -42,7 +40,7 @@ const Count = styled.span`
   padding-left: 5px;
 `
 
-const enhance = compose(withApollo, exportTaxonomiesData, data, propsByTaxData)
+const enhance = compose(withApollo, data, propsByTaxData)
 
 const RCOs = ({
   propsByTaxData,
@@ -73,9 +71,6 @@ const RCOs = ({
     'rcoCountByTaxonomyRelationTypeFunction.nodes',
     []
   )
-  // TODO:
-  // in every key of rcoPropertiesByPropertyCollection
-  // add id and name of Beziehungspartner
 
   Object.values(rcoPropertiesByPropertyCollection).forEach(rpc => {
     const myRpc = rpc[0] || {}
@@ -110,21 +105,20 @@ const RCOs = ({
   })
   const rcoPropertiesFields = groupBy(rcoProperties, 'propertyName')
   const rCCount = Object.keys(rcoPropertiesByPropertyCollection).length
+  const rcoPropertiesFieldsCount = Object.keys(rcoPropertiesFields).length
 
   return (
     <ErrorBoundary>
       <StyledCard>
         <StyledCardActions disableActionSpacing onClick={onToggleRco}>
           <CardActionTitle>
-            Beziehungssammlungen{rCCount > 0 && (
-              <Count>{`(${rCCount} Sammlungen, ${
-                Object.keys(rcoPropertiesFields).length
-              } ${
-                Object.keys(rcoPropertiesFields).length === 1
-                  ? 'Feld'
-                  : 'Felder'
-              })`}</Count>
-            )}
+            Beziehungssammlungen{
+              <Count>
+                {rcoPropertiesFieldsCount
+                  ? `(${rCCount} Sammlungen, ${rcoPropertiesFieldsCount} Felder)`
+                  : '(...)'}
+              </Count>
+            }
           </CardActionTitle>
           <CardActionIconButton
             data-expanded={rcoExpanded}
@@ -137,7 +131,6 @@ const RCOs = ({
           </CardActionIconButton>
         </StyledCardActions>
         <Collapse in={rcoExpanded} timeout="auto" unmountOnExit>
-          <ChooseNrOfRows />
           {Object.keys(rcoPropertiesByPropertyCollection).map(pc => (
             <RCO key={pc} pc={pc} />
           ))}

@@ -4,6 +4,7 @@ import Menu, { MenuItem } from 'material-ui/Menu'
 import Button from 'material-ui/Button'
 import MoreVertIcon from 'material-ui-icons/MoreVert'
 import styled from 'styled-components'
+import app from 'ampersand-app'
 
 const StyledMoreVertIcon = styled(MoreVertIcon)`
   color: white !important;
@@ -14,6 +15,11 @@ const StyledButton = styled(Button)`
   :hover {
     background-color: rgba(0, 0, 0, 0.12);
   }
+`
+const Version = styled.div`
+  padding: 12px 16px;
+  color: rgba(0, 0, 0, 0.87);
+  user-select: none;
 `
 
 const ITEM_HEIGHT = 48
@@ -55,7 +61,7 @@ class MoreMenu extends React.Component {
           PaperProps={{
             style: {
               maxHeight: ITEM_HEIGHT * 4.5,
-              width: 250,
+              width: 295,
             },
           }}
         >
@@ -77,6 +83,16 @@ class MoreMenu extends React.Component {
           >
             Fehler oder Wünsche melden
           </MenuItem>
+          <MenuItem
+            key="alt"
+            onClick={() => {
+              app.history.push('/artenlistentool/waehlen')
+              this.setState({ anchorEl: null })
+            }}
+          >
+            Felder für das Artenlistentool wählen
+          </MenuItem>
+          <Version>Version: 0.2.0 (Beta, 6.4.2018)</Version>
           {/*<MenuItem
             key="datagraph"
             onClick={() => {

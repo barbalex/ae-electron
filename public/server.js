@@ -103,6 +103,7 @@ async function start() {
       },
     },
   })
+
   await server.start()
   console.log('Server running at:', server.info.uri)
 }

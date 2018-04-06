@@ -5,6 +5,13 @@
  */
 
 const Hapi = require('hapi')
+const pgp = require(`pg-promise`)()
+const app = require(`ampersand-app`)
+
+const config = require(`./apiServer/config.js`)
+const altStandard = require('./apiServer/handlers/altStandard.js')
+const alt = require('./apiServer/handlers/alt.js')
+const evabArten = require('./apiServer/handlers/evabArten.js')
 
 /*
 const serverOptionsDevelopment = {
@@ -20,37 +27,32 @@ const server = new Hapi.Server({
 })
 
 async function start() {
-  server.route({
-    method: 'GET',
-    path:
-      '/artendb/_design/artendb/_list/export_alt_mit_synonymen_standardfelder/alt_arten_mit_synonymen',
-    handler: (request, h) => {
-      // TODO: can I redirect to api/alt?
-      return 'hello, you reached "artendb/_design/artendb/_list/export_alt_mit_synonymen_standardfelder/alt_arten_mit_synonymen"'
+  app.extend({
+    init() {
+      this.db = pgp(config.connectionString)
     },
   })
+  app.init()
 
   server.route({
     method: 'GET',
     path:
+      '/artendb/_design/artendb/_list/export_alt_mit_synonymen_standardfelder/alt_arten_mit_synonymen',
+    handler: alt,
+  })
+
+  server.route({
+    method: 'GET',
+    // do not redirect because query is lost!
+    path:
       '/artendb/_design/artendb/_list/export_alt_mit_synonymen/alt_arten_mit_synonymen',
-    handler: (request, h) => {
-      // TODO: can I redirect to api/alt?
-      return 'hello, you reached "artendb/_design/artendb/_list/export_alt_mit_synonymen/alt_arten_mit_synonymen"'
-    },
+    handler: alt,
   })
 
   server.route({
     method: 'GET',
     path: '/api/alt',
-    handler: (request, h) => {
-      /**
-       * TODO:
-       * add mandatory fields
-       * if fields are passed, add them
-       */
-      return 'hello, you reached "api/alt"'
-    },
+    handler: alt,
   })
 
   server.route({
@@ -62,20 +64,8 @@ async function start() {
   server.route({
     method: 'GET',
     path: '/api/evab/arten',
-    handler: (request, h) => {
-      return 'hello, you reached "api/evab/arten"'
-    },
+    handler: evabArten,
   })
-
-  /*
-  server.route({
-    method: 'GET',
-    path: '/{path*}',
-    handler: (request, h) => {
-      return `hello, you reached "${request.params.path}"`
-    },
-  })
-  */
 
   await server.start()
   console.log('API-Server running at:', server.info.uri)

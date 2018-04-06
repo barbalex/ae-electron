@@ -4,14 +4,13 @@ import compose from 'recompose/compose'
 import get from 'lodash/get'
 
 import activeNodeArrayData from '../modules/activeNodeArrayData'
-
-import PcoAsync from './PropertyCollection/PCO'
-import RcoAsync from './PropertyCollection/RCO'
-import ObjektAsync from './Objekt'
-import TaxonomyAsync from './Taxonomy'
-import PropertyCollectionAsync from './PropertyCollection'
-import BenutzerAsync from './Benutzer'
-import OrganisationAsync from './Organisation'
+import Pco from './PropertyCollection/PCO'
+import Rco from './PropertyCollection/RCO'
+import Objekt from './Objekt'
+import Taxonomy from './Taxonomy'
+import PropertyCollection from './PropertyCollection'
+import Benutzer from './Benutzer'
+import Organisation from './Organisation'
 
 const enhance = compose(activeNodeArrayData)
 
@@ -50,13 +49,13 @@ const DataType = ({
   const showOrganization =
     activeNodeArray[0] === 'Organisationen' && activeNodeArray.length === 2
 
-  if (showTaxonomy) return <TaxonomyAsync />
-  if (showObjekt) return <ObjektAsync stacked={stacked} />
-  if (showPC) return <PropertyCollectionAsync />
-  if (showPCO) return <PcoAsync dimensions={dimensions} />
-  if (showRCO) return <RcoAsync dimensions={dimensions} />
-  if (showBenutzer) return <BenutzerAsync dimensions={dimensions} />
-  if (showOrganization) return <OrganisationAsync dimensions={dimensions} />
+  if (showTaxonomy) return <Taxonomy />
+  if (showObjekt) return <Objekt stacked={stacked} />
+  if (showPC) return <PropertyCollection />
+  if (showPCO) return <Pco dimensions={dimensions} />
+  if (showRCO) return <Rco dimensions={dimensions} />
+  if (showBenutzer) return <Benutzer dimensions={dimensions} />
+  if (showOrganization) return <Organisation dimensions={dimensions} />
   return null
 }
 

@@ -12,12 +12,13 @@ import activeNodeArrayData from '../modules/activeNodeArrayData'
 import updateAvailableData from '../modules/updateAvailableData'
 import ErrorBoundary from './shared/ErrorBoundary'
 
-import ExportAsync from './Export'
-import AltGenerateUrlAsync from './AltGenerateUrl'
-import LoginAsync from './Login'
-import DataAsync from './Data'
-import FourOhFourAsync from './FourOhFour'
+import Export from './Export'
+import AltGenerateUrl from './AltGenerateUrl'
+import Login from './Login'
+import Data from './Data'
+import FourOhFour from './FourOhFour'
 import DataGraph from './DataGraph'
+import GraphIql from './GraphIql'
 
 const Container = styled.div`
   height: 100%;
@@ -97,18 +98,20 @@ class App extends Component<Props, State> {
       url0 === 'artenlistentool' && activeNodeArray[1] === 'waehlen'
     const showLogin = url0 === 'login'
     const showDataGraph = url0 === 'datagraph'
+    const showGraphIql = url0 === 'graphiql'
 
     return (
       <ErrorBoundary>
         <Container data-stacked={stacked}>
           <CssBaseline />
           <AppBar />
-          {showData && <DataAsync stacked={stacked} />}
-          {showExport && <ExportAsync stacked={stacked} />}
-          {showLogin && <LoginAsync />}
-          {show404 && <FourOhFourAsync />}
+          {showData && <Data stacked={stacked} />}
+          {showExport && <Export stacked={stacked} />}
+          {showLogin && <Login />}
+          {show404 && <FourOhFour />}
           {showDataGraph && <DataGraph />}
-          {showAltGenerateUrl && <AltGenerateUrlAsync />}
+          {showGraphIql && <GraphIql />}
+          {showAltGenerateUrl && <AltGenerateUrl />}
           <Snackbar
             open={updateAvailable}
             message={
