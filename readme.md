@@ -33,11 +33,8 @@ Inspired by [React Bits](https://www.youtube.com/watch?v=JrARTsX2RM0).
 1. package.json: replace dependencies and resolutions with values from ae2
 1. update version in `package.json`
 1. delete:
-  - docs
-  - tmp
   - public
   - src
-  - ecosystem.config.js
 1. add from ae2:
   - public
   - src
