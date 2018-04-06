@@ -31,6 +31,7 @@ Inspired by [React Bits](https://www.youtube.com/watch?v=JrARTsX2RM0).
 1. in ae2: update version in `package.json` and `src/components/AppBar/MoreMenu.js`
 1. switch to ae-electron
 1. package.json: replace dependencies and resolutions with values from ae2
+1. update version in `package.json`
 1. delete:
   - docs
   - tmp
@@ -47,6 +48,7 @@ Inspired by [React Bits](https://www.youtube.com/watch?v=JrARTsX2RM0).
   - `src/components/App.js`
   - `src/components/AppBar/index.js`
   - `src/components/DataType.js`
+1. Update devDependencies
 1. Reinstall libs:
   - `del yarn.lock`
   - `rmdir /s node_modules`
