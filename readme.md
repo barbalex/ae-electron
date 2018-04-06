@@ -68,23 +68,12 @@ Is caused by graphql when several dependencies load different versions of graphq
 - https://github.com/graphql/graphql-js/pull/1174#issuecomment-367734844
 - https://github.com/graphql/graphql-js/releases/tag/v0.13.0
 
-#### Tried solution
-
-Remove dependencies that `npm ls graphql` surfaced as using graphql:
-
-- graphiql
-- postgraphile
-
-Then got `extraneous` message :-(
-
-This may not be necessary, as the following seems to work:
-
-#### Working solution
-1. `yarn add graphql@0.13.0` as this version has solved the issue.
+#### Solution
+1. `yarn add graphql@0.13.2` as this version has solved the issue.
 1. add to package.json:
     ```json
       "resolutions": {
-        "graphql": "0.13.0"
+        "graphql": "0.13.2"
       },
     ```
     ...which is a yarn method to tackle this kind of problem :-)
