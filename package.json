@@ -58,7 +58,7 @@
     "electron": "1.8.4",
     "electron-builder": "20.8.1",
     "flow-bin": "0.69.0",
-    "react-scripts": "1.1.1",
+    "react-scripts": "1.1.4",
     "source-map-explorer": "1.5.0"
   },
   "scripts": {
