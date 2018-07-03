@@ -3,10 +3,10 @@ import React from 'react'
 import Autosuggest from 'react-autosuggest'
 import match from 'autosuggest-highlight/match'
 import parse from 'autosuggest-highlight/parse'
-import TextField from 'material-ui/TextField'
-import Paper from 'material-ui/Paper'
-import { MenuItem } from 'material-ui/Menu'
-import { withStyles } from 'material-ui/styles'
+import TextField from '@material-ui/core/TextField'
+import Paper from '@material-ui/core/Paper'
+import MenuItem from '@material-ui/core/MenuItem'
+import { withStyles } from '@material-ui/core/styles'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import { withApollo } from 'react-apollo'
@@ -100,13 +100,13 @@ const enhance = compose(withApollo, withStyles(styles))
 type Props = {
   label: string,
   value: string,
-  values: Array<string>,
+  values: Array<String>,
   updatePropertyInDb: () => void,
   classes: Object,
 }
 
 type State = {
-  suggestions: Array<string>,
+  suggestions: Array<String>,
   value: string,
 }
 

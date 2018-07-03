@@ -1,8 +1,8 @@
 // @flow
 import React from 'react'
 import ReactDataGrid from 'react-data-grid'
-import Button from 'material-ui/Button'
-import Snackbar from 'material-ui/Snackbar'
+import Button from '@material-ui/core/Button'
+import Snackbar from '@material-ui/core/Snackbar'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
@@ -10,7 +10,10 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import orderBy from 'lodash/orderBy'
 
-import exportData from './exportData'
+import exportRcoData from './exportRcoData'
+import exportObjectData from './exportObjectData'
+import exportPcoData from './exportPcoData'
+import synonymData from './synonymData'
 import exportIdsData from '../exportIdsData'
 import exportTaxonomiesData from '../exportTaxonomiesData'
 import exportPcoPropertiesData from '../exportPcoPropertiesData'
@@ -86,7 +89,10 @@ const enhance = compose(
   exportWithSynonymDataData,
   exportRcoInOneRowData,
   exportOnlyRowsWithPropertiesData,
-  exportData,
+  exportObjectData,
+  exportPcoData,
+  exportRcoData,
+  synonymData,
   withState('sortField', 'setSortField', 'id'),
   withState('sortDirection', 'setSortDirection', 'asc'),
   withState('message', 'setMessage', ''),
@@ -97,11 +103,14 @@ const enhance = compose(
         setTimeout(() => setMessage(''), 5000)
       }
     },
-  })
+  }),
 )
 
 const Preview = ({
-  exportData,
+  exportRcoData,
+  exportObjectData,
+  exportPcoData,
+  synonymData,
   propsByTaxData,
   exportIdsData,
   exportTaxonomiesData,
@@ -121,7 +130,10 @@ const Preview = ({
   message,
   onSetMessage,
 }: {
-  exportData: Object,
+  exportRcoData: Object,
+  exportObjectData: Object,
+  exportPcoData: Object,
+  synonymData: Object,
   propsByTaxData: Object,
   exportIdsData: Object,
   exportTaxonomiesData: Object,
@@ -173,17 +185,11 @@ const Preview = ({
     []
   )
   const exportRcoPropertyNames = exportRcoProperties.map(p => p.pname)
-  const { loading } = exportData
-  const objects = get(exportData, 'exportObject.nodes', [])
-  const objectsCount = get(
-    exportData,
-    'exportObject.totalCount',
-    0
-  ).toLocaleString('de-CH')
-  const pco = get(exportData, 'exportPco.nodes', [])
-  const synonymPco = get(exportData, 'exportSynonymPco.nodes', [])
-  const rco = get(exportData, 'exportRco.nodes', [])
-  const synonymRco = get(exportData, 'exportSynonymRco.nodes', [])
+  const objects = get(exportObjectData, 'exportObject.nodes', [])
+  const pco = get(exportPcoData, 'exportPco.nodes', [])
+  const rco = get(exportRcoData, 'exportRco.nodes', [])
+  const synonyms = get(synonymData, 'allSynonyms.nodes', [])
+
   // need taxFields to filter only data with properties
   let { rows, pvColumns } = rowsFromObjects({
     objects,
@@ -192,9 +198,8 @@ const Preview = ({
     exportRcoInOneRow,
     exportPcoProperties,
     pco,
-    synonymPco,
     rco,
-    synonymRco,
+    synonyms,
     exportRcoPropertyNames,
     exportRcoProperties,
     exportIds,
@@ -202,6 +207,12 @@ const Preview = ({
   })
   rows = orderBy(rows, sortField, sortDirection)
   const anzFelder = rows[0] ? Object.keys(rows[0]).length : 0
+  const loading = exportRcoData.loading ||
+    propsByTaxData.loading ||
+    exportObjectData.loading ||
+    exportPcoData.loading ||
+    synonymData.loading
+  //console.log('Preview:',{rows,anzFelder})
 
   return (
     <ErrorBoundary>
@@ -228,7 +239,7 @@ const Preview = ({
         )}
         {rows.length === 0 && (
           <SpreadsheetContainer>
-            <TotalDiv>{`${objectsCount} Datensätze`}</TotalDiv>
+            <TotalDiv>{`${rows.length.toLocaleString('de-CH')} Datensätze`}</TotalDiv>
           </SpreadsheetContainer>
         )}
         {rows.length > 0 && (
@@ -243,7 +254,7 @@ const Preview = ({
         )}
         <StyledSnackbar open={!!message} message={message} />
         <StyledSnackbar
-          open={exportData.loading || propsByTaxData.loading}
+          open={loading}
           message="Lade Daten..."
         />
       </Container>

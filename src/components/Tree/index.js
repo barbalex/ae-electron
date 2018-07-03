@@ -7,15 +7,13 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
-import Snackbar from 'material-ui/Snackbar'
+import Snackbar from '@material-ui/core/Snackbar'
 import get from 'lodash/get'
 
 import Row from './Row'
 import Filter from './Filter'
 import buildNodes from './buildNodes'
 import activeNodeArrayData from '../../modules/activeNodeArrayData'
-import loginData from '../../modules/loginData'
-import organizationUserData from '../../modules/organizationUserData'
 import treeData from './treeData'
 import CmBenutzerFolder from './contextmenu/BenutzerFolder'
 import CmBenutzer from './contextmenu/Benutzer'
@@ -86,32 +84,28 @@ const noRowsRenderer = nodes => (
 const enhance = compose(
   activeNodeArrayData,
   treeData,
-  loginData,
-  organizationUserData
 )
 
 const Tree = ({
   activeNodeArrayData,
   treeData,
-  loginData,
-  organizationUserData,
   // dimensions is passed down from ReflexElement
   dimensions,
 }: {
   activeNodeArrayData: Object,
   treeData: Object,
-  loginData: Object,
-  organizationUserData: Object,
   dimensions: Object,
 }) => {
   const activeNodeArray = get(activeNodeArrayData, 'activeNodeArray', [])
   const { error, loading: treeDataLoading } = treeData
+  if (error) {
+    console.log('Tree: error:', error)
+    return <div> {error.message} </div>
+  }
   const nodes = buildNodes({
     treeData,
     activeNodeArray,
-    loginData,
   })
-  //console.log('Tree: nodes:', nodes)
   const rowRenderer = ({ key, index, style }) => (
     <Row
       key={key}
@@ -124,13 +118,9 @@ const Tree = ({
   const activeNodeIndex = findIndex(nodes, node =>
     isEqual(node.url, activeNodeArray)
   )
-  if (error) {
-    console.log('Tree: error:', error)
-    return <div> {error.message} </div>
-  }
-  const username = get(loginData, 'login.username', null)
+  const username = get(treeData, 'login.username', null)
   const organizationUsers = get(
-    organizationUserData,
+    treeData,
     'allOrganizationUsers.nodes',
     []
   )

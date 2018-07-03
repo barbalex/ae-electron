@@ -16,18 +16,18 @@ import booleanToJaNein from '../../../modules/booleanToJaNein'
 import conv from '../../../modules/convertExportFieldName'
 
 export default ({
-  rcoToUse,
+  thisObjectsRco,
   exportRcoProperties,
   row,
   aditionalRows,
 }: {
-  rcoToUse: Array<Object>,
+  thisObjectsRco: Array<Object>,
   exportRcoProperties: Array<Object>,
   row: Object,
   aditionalRows: Array<Object>,
 }) => {
   let rowToUse = row
-  rcoToUse.forEach(rco => {
+  thisObjectsRco.forEach((rco, index) => {
     // 0. check if first property already exist
     const firstProperty = exportRcoProperties[0]
     const firstField = `${conv(firstProperty.pcname)}__${conv(
@@ -45,37 +45,12 @@ export default ({
         p.relationtype === rco.relationType
     )
     if (rcoP_id) {
-      const bezPartnerId = rcoToUse
-        .map(rco => get(rco, 'objectByObjectIdRelation.id', null))
-        .join(' | ')
+      const bezPartnerId = get(thisObjectsRco[index], 'objectByObjectIdRelation.id', null)
       rowToUse[
         `${conv(rcoP_id.pcname)}__${conv(
           rcoP_id.relationtype
         )}__Beziehungspartner_id`
-      ] =
-        rowToUse[
-          `${conv(rcoP_id.pcname)}__${conv(
-            rcoP_id.relationtype
-          )}__Beziehungspartner_id`
-        ] === undefined
-          ? bezPartnerId
-          : rowToUse[
-              `${conv(rcoP_id.pcname)}__${conv(
-                rcoP_id.relationtype
-              )}__Beziehungspartner_id`
-            ].includes(bezPartnerId)
-            ? rowToUse[
-                `${conv(rcoP_id.pcname)}__${conv(
-                  rcoP_id.relationtype
-                )}__Beziehungspartner_id`
-              ]
-            : `${
-                rowToUse[
-                  `${conv(rcoP_id.pcname)}__${conv(
-                    rcoP_id.relationtype
-                  )}__Beziehungspartner_id`
-                ]
-              } | ${bezPartnerId}`
+      ] = bezPartnerId
     }
     // 2. check for Beziehungspartner_Name
     const rcoP_name = exportRcoProperties.find(
@@ -84,45 +59,17 @@ export default ({
         p.relationtype === rco.relationType
     )
     if (rcoP_name) {
-      const bezPartner = rcoToUse
-        .map(rco => {
-          const bezPartnerTaxonomyName = get(
-            rco,
-            'objectByObjectIdRelation.taxonomyByTaxonomyId.name',
-            ''
-          )
-          const bezPartnerName = get(rco, 'objectByObjectIdRelation.name', '')
-          return `${bezPartnerTaxonomyName}: ${bezPartnerName}`
-        })
-        .join(' | ')
+      const bezPartnerTaxonomyName = get(
+        thisObjectsRco[index],
+        'objectByObjectIdRelation.taxonomyByTaxonomyId.name',
+        ''
+      )
+      const bezPartnerName = get(thisObjectsRco[index], 'objectByObjectIdRelation.name', '')
       rowToUse[
         `${conv(rcoP_name.pcname)}__${conv(
           rcoP_name.relationtype
         )}__Beziehungspartner_Name`
-      ] =
-        rowToUse[
-          `${conv(rcoP_name.pcname)}__${conv(
-            rcoP_name.relationtype
-          )}__Beziehungspartner_Name`
-        ] === undefined
-          ? bezPartner
-          : rowToUse[
-              `${conv(rcoP_name.pcname)}__${conv(
-                rcoP_name.relationtype
-              )}__Beziehungspartner_Name`
-            ].includes(bezPartner)
-            ? rowToUse[
-                `${conv(rcoP_name.pcname)}__${conv(
-                  rcoP_name.relationtype
-                )}__Beziehungspartner_Name`
-              ]
-            : `${
-                rowToUse[
-                  `${conv(rcoP_name.pcname)}__${conv(
-                    rcoP_name.relationtype
-                  )}__Beziehungspartner_Name`
-                ]
-              } | ${bezPartner}`
+      ] = `${bezPartnerTaxonomyName}: ${bezPartnerName}`
     }
     // 3. get properties
     const rcoProperties = JSON.parse(rco.properties)

@@ -2,16 +2,15 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import CssBaseline from 'material-ui/CssBaseline'
-import Button from 'material-ui/Button'
-import Snackbar from 'material-ui/Snackbar'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Button from '@material-ui/core/Button'
+import Snackbar from '@material-ui/core/Snackbar'
 import get from 'lodash/get'
 
 import AppBar from './AppBar'
 import activeNodeArrayData from '../modules/activeNodeArrayData'
 import updateAvailableData from '../modules/updateAvailableData'
 import ErrorBoundary from './shared/ErrorBoundary'
-
 import Export from './Export'
 import AltGenerateUrl from './AltGenerateUrl'
 import Login from './Login'
@@ -25,6 +24,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
+
 
 const enhance = compose(activeNodeArrayData, updateAvailableData)
 

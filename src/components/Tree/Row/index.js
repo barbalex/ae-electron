@@ -4,10 +4,10 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import { ContextMenuTrigger } from 'react-contextmenu'
-import ExpandMoreIcon from 'material-ui-icons/ExpandMore'
-import ChevronRightIcon from 'material-ui-icons/ChevronRight'
-import MoreHorizIcon from 'material-ui-icons/MoreHoriz'
-import Icon from 'material-ui/Icon'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+import Icon from '@material-ui/core/Icon'
 import isEqual from 'lodash/isEqual'
 import { withApollo } from 'react-apollo'
 import app from 'ampersand-app'
@@ -95,11 +95,25 @@ const enhance = compose(
   editingTaxonomiesData,
   withHandlers({
     onClickNode: ({ node, index, activeNodeArray }) => event => {
-      // do nothing when loading indicator is clicked
-      // or if node is already active
       const { url, loadingNode } = node
-      if (!loadingNode && !isEqual(url, activeNodeArray)) {
+      // do nothing when loading indicator is clicked
+      if (loadingNode) return
+      // or if node is already active
+      if (!isEqual(url, activeNodeArray)) {
         app.history.push(`/${url.join('/')}`)
+      }
+    },
+    onClickExpandMore: ({ node, index, activeNodeArray }) => event => {
+      const { url, loadingNode } = node
+      // do nothing when loading indicator is clicked
+      if (loadingNode) return
+      if (isEqual(url, activeNodeArray)) {
+        // close node if its expand mor symbol was clicked
+        const newUrl = [...url]
+        newUrl.pop()
+        app.history.push(`/${newUrl.join('/')}`)
+        // prevent onClick on node
+        event.preventDefault()
       }
     },
     onClickContextMenu: ({
@@ -130,6 +144,7 @@ const Row = ({
   node,
   client,
   onClickNode,
+  onClickExpandMore,
   onClickContextMenu,
   activeNodeArray,
 }: {
@@ -139,6 +154,7 @@ const Row = ({
   node: Object,
   client: Object,
   onClickNode: () => void,
+  onClickExpandMore: () => void,
   onClickContextMenu: () => void,
   activeNodeArray: Array<String>,
 }) => {
@@ -188,7 +204,7 @@ const Row = ({
                 data-nodeisinactivenodepath={nodeIsInActiveNodePath}
                 className="material-icons"
               >
-                {symbol === 'ExpandMore' && <ExpandMoreIcon />}
+                {symbol === 'ExpandMore' && <ExpandMoreIcon onClick={onClickExpandMore} />}
                 {symbol === 'ChevronRight' && <ChevronRightIcon />}
                 {symbol === 'MoreHoriz' && <MoreHorizIcon />}
               </SymbolIcon>

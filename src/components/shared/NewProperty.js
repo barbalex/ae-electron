@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
-import TextField from 'material-ui/TextField'
-import { InputLabel } from 'material-ui/Input'
+import TextField from '@material-ui/core/TextField'
+import InputLabel from '@material-ui/core/InputLabel'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -12,7 +12,7 @@ import ErrorBoundary from '../shared/ErrorBoundary'
 import updatePropertyMutation from './updatePropertyMutation'
 
 const Container = styled.div`
-  margin: 20px 10px 12px 10px;
+  margin: 20px 10px 12px 0;
 `
 const FieldContainer = styled.div`
   width: 100%;

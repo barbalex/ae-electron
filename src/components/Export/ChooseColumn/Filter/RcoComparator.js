@@ -1,16 +1,15 @@
 //@flow
 import React from 'react'
-import { withStyles } from 'material-ui/styles'
-import Input, { InputLabel } from 'material-ui/Input'
-import { MenuItem } from 'material-ui/Menu'
-import { FormControl } from 'material-ui/Form'
-import Select from 'material-ui/Select'
+import { withStyles } from '@material-ui/core/styles'
+import InputLabel from '@material-ui/core/InputLabel'
+import FormControl from '@material-ui/core/FormControl'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import { withApollo } from 'react-apollo'
 
 import exportRcoFiltersMutation from '../../exportRcoFiltersMutation'
+import ComparatorSelect from './ComparatorSelect'
 
 const Container = styled.div`
   flex-basis: 150px;
@@ -21,11 +20,6 @@ const StyledFormControl = styled(FormControl)`
   margin: 0 !important;
   width: 100%;
   > label {
-    padding-left: 8px;
-  }
-`
-const StyledSelect = styled(Select)`
-  > div {
     padding-left: 8px;
   }
 `
@@ -47,10 +41,10 @@ const enhance = compose(
   withApollo,
   withStyles(styles),
   withHandlers({
-    onChange: ({ pcname, pname, value, client }) => event =>
+    onChange: ({ pcname, relationtype, pname, value, client }) => event =>
       client.mutate({
         mutation: exportRcoFiltersMutation,
-        variables: { pcname, pname, comparator: event.target.value, value },
+        variables: { pcname, relationtype, pname, comparator: event.target.value, value },
       }),
   })
 )
@@ -68,21 +62,10 @@ const RcoComparator = ({
     <Container>
       <StyledFormControl className={classes.formControl}>
         <InputLabel htmlFor="v-op">Vergleichs-Operator</InputLabel>
-        <StyledSelect
-          value={comparator}
+        <ComparatorSelect
+          comparator={comparator}
           onChange={onChange}
-          input={<Input id="v-op" />}
-        >
-          <MenuItem value="ILIKE">enthalten</MenuItem>
-          <MenuItem value="LIKE">
-            enthalten (Grosschreibung berücksichtigt)
-          </MenuItem>
-          <MenuItem value="=">&#61; (genau gleich)</MenuItem>
-          <MenuItem value=">">&#62;</MenuItem>
-          <MenuItem value=">=">&#62;&#61;</MenuItem>
-          <MenuItem value="<">&#60;</MenuItem>
-          <MenuItem value="<=">&#60;&#61;</MenuItem>
-        </StyledSelect>
+        />
       </StyledFormControl>
     </Container>
   )

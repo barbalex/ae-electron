@@ -6,12 +6,17 @@ import gql from 'graphql-tag'
 export default graphql(
   gql`
     query userQuery($id: UUID!) {
+      login @client {
+        token
+        username
+      }
       userById(id: $id) {
         id
         name
         email
         organizationUsersByUserId {
           nodes {
+            id
             organizationByOrganizationId {
               id
               name
@@ -42,6 +47,6 @@ export default graphql(
           '99999999-9999-9999-9999-999999999999',
       },
     }),
-    name: 'userData',
+    name: 'data',
   }
 )

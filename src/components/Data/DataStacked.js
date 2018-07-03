@@ -1,7 +1,8 @@
 // @flow
 import React, { Fragment } from 'react'
-import Paper from 'material-ui/Paper'
-import Tabs, { Tab } from 'material-ui/Tabs'
+import Paper from '@material-ui/core/Paper'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -14,17 +15,7 @@ import DataType from '../DataType'
 import activeNodeArrayData from '../../modules/activeNodeArrayData'
 
 const StyledPaper = styled(Paper)`
-  background-color: #ef6c00 !important;
-`
-const StyledTabs = styled(Tabs)`
-  .indicator {
-    height: 3px;
-  }
-`
-const StyledTab = styled(Tab)`
-  > span > span > span {
-    color: ${props => (props.disabled ? 'rgba(255,255,255,0.5)' : 'white')};
-  }
+  background-color: #ffcc80 !important;
 `
 const StyledSwipeableViews = styled(SwipeableViews)`
   height: 100%;
@@ -65,16 +56,15 @@ const DataStacked = ({
   return (
     <Fragment>
       <StyledPaper>
-        <StyledTabs
+        <Tabs
           centered
           value={tab}
           onChange={onChangeTab}
-          indicatorColor="#2E7D32"
-          textColor="secondary"
+          indicatorColor="primary"
         >
-          <StyledTab label="Strukturbaum" />
-          <StyledTab label="Formular" disabled={disableDataType} />
-        </StyledTabs>
+          <Tab label="Strukturbaum" />
+          <Tab label="Formular" disabled={disableDataType} />
+        </Tabs>
       </StyledPaper>
       <StyledSwipeableViews
         axis="x"

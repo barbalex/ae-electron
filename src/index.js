@@ -10,7 +10,7 @@ import { ApolloLink } from 'apollo-link'
 import get from 'lodash/get'
 import jwtDecode from 'jwt-decode'
 
-import { MuiThemeProvider } from 'material-ui/styles'
+import { MuiThemeProvider } from '@material-ui/core/styles'
 import app from 'ampersand-app'
 import createHistory from 'history/createBrowserHistory'
 
@@ -36,11 +36,13 @@ const launchApp = async () => {
     Wir empfehlen eine aktuelle Version von Chrome oder Firefox`)
 
   // need to test this on the server
+  // sadly did not work
+  /*
   console.log('process.env:', process.env)
   console.log(
     'process.env.npm_package_version:',
     process.env.npm_package_version
-  )
+  )*/
 
   try {
     const idb = initializeIdb()
@@ -51,9 +53,8 @@ const launchApp = async () => {
      * for reasons unrelated to the database itself and not covered by any other error code
      */
     const authMiddleware = setContext(async () => {
-      let users
-      users = await idb.users.toArray()
-      const token = get(users, '[0].token')
+      const user = await idb.users.toArray()
+      const token = get(user, '[0].token')
       if (token) {
         const tokenDecoded = jwtDecode(token)
         // for unknown reason, date.now returns three more after comma
@@ -108,10 +109,11 @@ const launchApp = async () => {
     })
 
     const cache = new InMemoryCache()
+    const myDefaults = await defaults(idb)
     const stateLink = withClientState({
       resolvers,
       cache,
-      defaults,
+      defaults: myDefaults,
     })
     const httpLink = createHttpLink({
       uri: graphQlUri(),
@@ -155,6 +157,7 @@ const launchApp = async () => {
     window.app = app
 
     // initiate activeNodeArray
+    // NOT in electron
     /*
     let activeNodeArray = getActiveNodeArrayFromPathname()
     client.mutate({
@@ -169,7 +172,8 @@ const launchApp = async () => {
         },
         __typename: 'Mutation',
       },
-    })*/
+    })
+    */
 
     ReactDOM.render(
       <ApolloProvider client={client}>

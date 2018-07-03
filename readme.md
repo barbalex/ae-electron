@@ -6,7 +6,7 @@ Install the [arteigenschaften.ch](http://arteigenschaften.ch) frontend as a loca
 Why? Because [FNS](https://naturschutz.zh.ch) does not have access to modern browsers. It may also help speed things up on their relatively weak computers.
 
 ## 2 What is arteigenschaften.ch?
-A tool to collect and work with attributes of species and habitats for any taxonomies [(more)](https://github.com/barbalex/ae2/blob/master/readme.md).
+A tool to collect and work with attributes of species and habitats for any taxonomies [(more)](https://github.com/FNSKtZH/ae2/blob/master/readme.md).
 
 ## 3 Technical solution
 [electron](https://electronjs.org) is used to make the create-react-app locally installable.
@@ -18,7 +18,7 @@ Inspired by [React Bits](https://www.youtube.com/watch?v=JrARTsX2RM0).
 - Follow https://www.youtube.com/watch?v=JrARTsX2RM0, https://github.com/popupbits/react-electron
 - `yarn add @heroku/foreman`, not foreman itself: That has unsolved issues.
 - Add `"extends": null` to the build key in package.json to solve another issue: https://github.com/electron-userland/electron-builder/issues/2030#issuecomment-327155801
-- Set graphQlUri to `https://artdaten.ch/graphql` in `src/modules/graphQlUri`
+- Set graphQlUri to `https://arteigenschaften.ch/graphql` in `src/modules/graphQlUri`
 - Do not initiate activeNodeArray from pathname in index.js (as the inital pathname is a file url): uncomment that code.
 - In getActiveNodeArrayFromPathname prepend: `.replace('/C:', '')`, so it ends up as: `window.location.pathname.replace('/C:', '').replace('/', '')`
 - Do not dynamically load chunks, that leads to issues.
@@ -28,6 +28,7 @@ Inspired by [React Bits](https://www.youtube.com/watch?v=JrARTsX2RM0).
 - Open links in Browser instead of new electron window?
 
 ### How to update from main repository (ae2)
+1. in apflora: move all .graphql calls to gql``
 1. in ae2: update version in `package.json` and `src/components/AppBar/MoreMenu.js`
 1. switch to ae-electron
 1. package.json: replace dependencies and resolutions with values from ae2
@@ -40,7 +41,7 @@ Inspired by [React Bits](https://www.youtube.com/watch?v=JrARTsX2RM0).
   - src
 1. Do not initiate activeNodeArray from pathname in `index.js` (as the inital pathname is a file url): uncomment that code.
 1. In `src/modules/getActiveNodeArrayFromPathname.js` prepend: `.replace('/C:', '')`, so it ends up as: `window.location.pathname.replace('/C:', '').replace('/', '')`
-1. Set graphQlUri to `https://artdaten.ch/graphql` in `src/modules/graphQlUri`
+1. Set graphQlUri to `https://artdaten.ch/graphql` in `src/modules/graphQlUri` (for testing purposes)
 1. Do not dynamically load chunks. Files:
   - `src/components/App.js`
   - `src/components/AppBar/index.js`
@@ -53,6 +54,8 @@ Inspired by [React Bits](https://www.youtube.com/watch?v=JrARTsX2RM0).
 1. Enable logging: uncomment `win.openDevTools()` in `main.js`
 1. Run dev mode: `yarn dev` and test
 1. Build `run ebuild`
+1. Set graphQlUri to `https://arteigenschaften.ch/graphql` in `src/modules/graphQlUri`
+1. Test if dynamic imports for exports work (apflora)
 
 ### Nearly blocking issue
 ```bash

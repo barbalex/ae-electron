@@ -24,11 +24,9 @@ import sort from './nodes/sort'
 export default ({
   treeData,
   activeNodeArray,
-  loginData,
 }: {
   treeData: Object,
   activeNodeArray: Object,
-  loginData: Object,
 }): Array<Object> => {
   const activeLevel2TaxonomyNodes = activeNodeArray[0]
     ? get(treeData, 'allTaxonomies.nodes', []).filter(n => {
@@ -47,7 +45,6 @@ export default ({
     activeLevel3ObjectNodes.find(n => n.id === activeNodeArray[2])
   const activeLevel3ObjectName = activeLevel3Object && activeLevel3Object.name
   const activeLevel3ObjectId = activeLevel3Object && activeLevel3Object.id
-
   const activeLevel4ObjectNodes = get(
     treeData,
     'level4Object.objectsByParentId.nodes'
@@ -106,30 +103,40 @@ export default ({
   let nodes = level1({
     treeData,
     activeNodeArray,
-    loginData,
   })
   if (activeNodeArray.length > 0) {
     switch (activeNodeArray[0]) {
       case 'Eigenschaften-Sammlungen': {
-        nodes = nodes.concat(
-          level2Pc({
-            treeData,
-          })
-        )
+        nodes = [
+          ...nodes,
+          ...level2Pc({ treeData }),
+        ]
         break
       }
       case 'Benutzer': {
-        nodes = nodes.concat(level2Benutzer({ treeData }))
+        const token = get(treeData, 'login.token')
+        if (!!token) {
+          nodes = [
+            ...nodes,
+            ...level2Benutzer({ treeData }),
+          ]
+        }
         break
       }
       case 'Organisationen': {
-        nodes = nodes.concat(level2Organization({ treeData, loginData }))
+        nodes = [
+          ...nodes,
+          ...level2Organization({ treeData }),
+        ]
         break
       }
       default:
       case 'Arten':
       case 'Lebensräume': {
-        nodes = nodes.concat(level2Taxonomy({ treeData, activeNodeArray }))
+        nodes = [
+          ...nodes,
+          ...level2Taxonomy({ treeData, activeNodeArray }),
+        ]
         break
       }
     }
@@ -143,6 +150,12 @@ export default ({
         treeData,
       })
     )
+  }
+  if (
+    activeNodeArray.length > 1 &&
+    activeNodeArray[0] === 'Benutzer'
+  ) {
+    // TODO
   }
   if (
     activeNodeArray.length > 1 &&

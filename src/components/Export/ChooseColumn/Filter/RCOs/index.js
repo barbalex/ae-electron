@@ -1,10 +1,11 @@
 // @flow
 import React from 'react'
-import Card, { CardActions } from 'material-ui/Card'
-import Collapse from 'material-ui/transitions/Collapse'
-import IconButton from 'material-ui/IconButton'
-import Icon from 'material-ui/Icon'
-import ExpandMoreIcon from 'material-ui-icons/ExpandMore'
+import Card from '@material-ui/core/Card'
+import CardActions from '@material-ui/core/CardActions'
+import Collapse from '@material-ui/core/Collapse'
+import IconButton from '@material-ui/core/IconButton'
+import Icon from '@material-ui/core/Icon'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import styled from 'styled-components'
 import { withApollo } from 'react-apollo'
 import get from 'lodash/get'
@@ -17,8 +18,10 @@ import propsByTaxData from '../../propsByTaxData'
 import exportTaxonomiesData from '../../../exportTaxonomiesData'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
-const StyledCard = styled(Card)`
+const Container = styled.div`
   margin: 10px 0;
+`
+const StyledCard = styled(Card)`
   background-color: rgb(255, 243, 224) !important;
 `
 const StyledCardActions = styled(CardActions)`
@@ -78,35 +81,37 @@ const RcosCard = ({
 
   return (
     <ErrorBoundary>
-      <StyledCard>
-        <StyledCardActions disableActionSpacing onClick={onToggleRco}>
-          <CardActionTitle>
-            Beziehungssammlungen{rCCount > 0 && (
-              <Count>{`(${rCCount} Sammlungen, ${
-                Object.keys(rcoPropertiesFields).length
-              } ${
-                Object.keys(rcoPropertiesFields).length === 1
-                  ? 'Feld'
-                  : 'Felder'
-              })`}</Count>
-            )}
-          </CardActionTitle>
-          <CardActionIconButton
-            data-expanded={rcoExpanded}
-            aria-expanded={rcoExpanded}
-            aria-label="Show more"
-          >
-            <Icon>
-              <ExpandMoreIcon />
-            </Icon>
-          </CardActionIconButton>
-        </StyledCardActions>
-        <Collapse in={rcoExpanded} timeout="auto" unmountOnExit>
-          {Object.keys(rcoPropertiesByPropertyCollection).map(pc => (
-            <RCO key={pc} pc={pc} />
-          ))}
-        </Collapse>
-      </StyledCard>
+      <Container>
+        <StyledCard>
+          <StyledCardActions disableActionSpacing onClick={onToggleRco}>
+            <CardActionTitle>
+              Beziehungssammlungen{rCCount > 0 && (
+                <Count>{`(${rCCount} Sammlungen, ${
+                  Object.keys(rcoPropertiesFields).length
+                } ${
+                  Object.keys(rcoPropertiesFields).length === 1
+                    ? 'Feld'
+                    : 'Felder'
+                })`}</Count>
+              )}
+            </CardActionTitle>
+            <CardActionIconButton
+              data-expanded={rcoExpanded}
+              aria-expanded={rcoExpanded}
+              aria-label="Show more"
+            >
+              <Icon>
+                <ExpandMoreIcon />
+              </Icon>
+            </CardActionIconButton>
+          </StyledCardActions>
+          <Collapse in={rcoExpanded} timeout="auto" unmountOnExit>
+            {Object.keys(rcoPropertiesByPropertyCollection).map(pc => (
+              <RCO key={pc} pc={pc} />
+            ))}
+          </Collapse>
+        </StyledCard>
+      </Container>
     </ErrorBoundary>
   )
 }

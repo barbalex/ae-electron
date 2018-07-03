@@ -1,9 +1,9 @@
 // @flow
 import React from 'react'
-import TextField from 'material-ui/TextField'
-import IconButton from 'material-ui/IconButton'
-import Icon from 'material-ui/Icon'
-import ClearIcon from 'material-ui-icons/Clear'
+import TextField from '@material-ui/core/TextField'
+import IconButton from '@material-ui/core/IconButton'
+import Icon from '@material-ui/core/Icon'
+import ClearIcon from '@material-ui/icons/Clear'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'

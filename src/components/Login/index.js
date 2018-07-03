@@ -1,13 +1,16 @@
 // @flow
 import React from 'react'
-import TextField from 'material-ui/TextField'
-import { FormControl, FormHelperText } from 'material-ui/Form'
-import Snackbar from 'material-ui/Snackbar'
-import Button from 'material-ui/Button'
-import Input, { InputLabel, InputAdornment } from 'material-ui/Input'
-import IconButton from 'material-ui/IconButton'
-import Visibility from 'material-ui-icons/Visibility'
-import VisibilityOff from 'material-ui-icons/VisibilityOff'
+import TextField from '@material-ui/core/TextField'
+import FormHelperText from '@material-ui/core/FormHelperText'
+import FormControl from '@material-ui/core/FormControl'
+import Snackbar from '@material-ui/core/Snackbar'
+import Button from '@material-ui/core/Button'
+import Input from '@material-ui/core/Input'
+import InputLabel from '@material-ui/core/InputLabel'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import IconButton from '@material-ui/core/IconButton'
+import Visibility from '@material-ui/icons/Visibility'
+import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -182,6 +185,7 @@ const Login = ({
                   <IconButton
                     onClick={() => changeShowPass(!showPass)}
                     onMouseDown={e => e.preventDefault()}
+                    title={showPass ? 'verstecken' : 'anzeigen'}
                   >
                     {showPass ? <VisibilityOff /> : <Visibility />}
                   </IconButton>

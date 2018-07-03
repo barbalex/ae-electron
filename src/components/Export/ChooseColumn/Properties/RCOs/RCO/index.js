@@ -1,10 +1,11 @@
 // @flow
 import React, { Fragment } from 'react'
-import Card, { CardActions } from 'material-ui/Card'
-import Collapse from 'material-ui/transitions/Collapse'
-import IconButton from 'material-ui/IconButton'
-import Icon from 'material-ui/Icon'
-import ExpandMoreIcon from 'material-ui-icons/ExpandMore'
+import Card from '@material-ui/core/Card'
+import CardActions from '@material-ui/core/CardActions'
+import Collapse from '@material-ui/core/Collapse'
+import IconButton from '@material-ui/core/IconButton'
+import Icon from '@material-ui/core/Icon'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import styled from 'styled-components'
 import { withApollo } from 'react-apollo'
 import get from 'lodash/get'
@@ -89,13 +90,12 @@ const RCO = ({
     }
     return `${x.propertyCollectionName}: ${x.relationType}`
   })
-  // TODO: need to add BeziehungsPartnerId and BeziehungsPartnerName
+  // need to add BeziehungsPartnerId and BeziehungsPartnerName
   const rcoCountByTaxonomyRelationType = get(
     data,
     'rcoCountByTaxonomyRelationTypeFunction.nodes',
     []
   )
-  // TODO:
   // in every key of rcoPropertiesByPropertyCollection
   // add id and name of Beziehungspartner
 

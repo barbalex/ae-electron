@@ -5,8 +5,9 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import Paper from 'material-ui/Paper'
-import Tabs, { Tab } from 'material-ui/Tabs'
+import Paper from '@material-ui/core/Paper'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 
 import activeNodeArrayData from '../../modules/activeNodeArrayData'
 import orgData from './orgData'
@@ -34,11 +35,6 @@ const OrgContainer = styled.div`
 `
 const StyledPaper = styled(Paper)`
   background-color: #ffcc80 !important;
-`
-const StyledTabs = styled(Tabs)`
-  .indicator {
-    height: 3px;
-  }
 `
 
 const Organization = ({
@@ -77,18 +73,18 @@ const Organization = ({
           />
         </OrgContainer>
         <StyledPaper>
-          <StyledTabs
+          <Tabs
             centered={width > 705}
             value={tab}
             onChange={onChangeTab}
-            indicatorColor="#E65100"
+            indicatorColor="primary"
             scrollable={width <= 705}
             scrollButtons="auto"
           >
             <Tab label="Benutzer mit Rollen" />
             <Tab label="Taxonomien" />
             <Tab label="Eigenschaften-Sammlungen" />
-          </StyledTabs>
+          </Tabs>
         </StyledPaper>
         {tab === 0 && <OrgUsers key={org.id} />}
         {tab === 1 && <TCs />}

@@ -1,10 +1,13 @@
 import React from 'react'
-import Icon from 'material-ui/Icon'
-import Menu, { MenuItem } from 'material-ui/Menu'
-import Button from 'material-ui/Button'
-import MoreVertIcon from 'material-ui-icons/MoreVert'
+import Icon from '@material-ui/core/Icon'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import Button from '@material-ui/core/Button'
+import MoreVertIcon from '@material-ui/icons/MoreVert'
 import styled from 'styled-components'
 import app from 'ampersand-app'
+
+import relations from '../../modules/relations.png'
 
 const StyledMoreVertIcon = styled(MoreVertIcon)`
   color: white !important;
@@ -60,7 +63,7 @@ class MoreMenu extends React.Component {
           onClose={this.handleClose}
           PaperProps={{
             style: {
-              maxHeight: ITEM_HEIGHT * 4.5,
+              maxHeight: ITEM_HEIGHT * 5.5,
               width: 295,
             },
           }}
@@ -68,16 +71,25 @@ class MoreMenu extends React.Component {
           <MenuItem
             key="ueber"
             onClick={() => {
-              window.open('https://github.com/barbalex/ae2')
+              window.open('https://github.com/FNSKtZH/ae2')
               this.setState({ anchorEl: null })
             }}
           >
             über arteigenschaften.ch
           </MenuItem>
           <MenuItem
+            key="relations"
+            onClick={() => {
+              window.open(relations)
+              this.setState({ anchorEl: null })
+            }}
+          >
+            Daten-Struktur
+          </MenuItem>
+          <MenuItem
             key="melden"
             onClick={() => {
-              window.open('https://github.com/barbalex/ae2/issues')
+              window.open('https://github.com/FNSKtZH/ae2/issues')
               this.setState({ anchorEl: null })
             }}
           >
@@ -92,7 +104,7 @@ class MoreMenu extends React.Component {
           >
             Felder für das Artenlistentool wählen
           </MenuItem>
-          <Version>Version: 0.2.0 (Beta, 6.4.2018)</Version>
+          <Version>Version: 1.0.2 vom 3.7.2018</Version>
           {/*<MenuItem
             key="datagraph"
             onClick={() => {

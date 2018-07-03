@@ -1,11 +1,12 @@
 // @flow
 import React from 'react'
-import Card, { CardActions } from 'material-ui/Card'
-import Collapse from 'material-ui/transitions/Collapse'
-import IconButton from 'material-ui/IconButton'
-import Icon from 'material-ui/Icon'
-import ExpandMoreIcon from 'material-ui-icons/ExpandMore'
-import Snackbar from 'material-ui/Snackbar'
+import Card from '@material-ui/core/Card'
+import CardActions from '@material-ui/core/CardActions'
+import Collapse from '@material-ui/core/Collapse'
+import IconButton from '@material-ui/core/IconButton'
+import Icon from '@material-ui/core/Icon'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import Snackbar from '@material-ui/core/Snackbar'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -22,6 +23,11 @@ import exportTaxPropertiesData from '../exportTaxPropertiesData'
 import exportTaxFiltersData from '../exportTaxFiltersData'
 import exportPcoFiltersData from '../exportPcoFiltersData'
 import exportRcoFiltersData from '../exportRcoFiltersData'
+import exportObjectData from '../PreviewColumn/exportObjectData'
+import exportRcoData from '../PreviewColumn/exportRcoData'
+import exportPcoData from '../PreviewColumn/exportPcoData'
+import synonymData from '../PreviewColumn/synonymData'
+import propsByTaxData from './propsByTaxData'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const StyledSnackbar = styled(Snackbar)`
@@ -65,6 +71,11 @@ const enhance = compose(
   exportTaxFiltersData,
   exportPcoFiltersData,
   exportRcoFiltersData,
+  propsByTaxData,
+  exportObjectData,
+  exportRcoData,
+  exportPcoData,
+  synonymData,
   withState('taxonomiesExpanded', 'setTaxonomiesExpanded', true),
   withState('filterExpanded', 'setFilterExpanded', false),
   withState('propertiesExpanded', 'setPropertiesExpanded', false),
@@ -91,6 +102,7 @@ const enhance = compose(
     },
     onToggleFilter: ({
       exportTaxonomiesData,
+      propsByTaxData,
       filterExpanded,
       setTaxonomiesExpanded,
       setFilterExpanded,
@@ -98,18 +110,23 @@ const enhance = compose(
       onSetMessage,
     }) => () => {
       const exportTaxonomies = get(exportTaxonomiesData, 'exportTaxonomies', [])
-      if (!filterExpanded && exportTaxonomies.length > 0) {
+      const loading = propsByTaxData.loading
+      if (!filterExpanded && exportTaxonomies.length > 0 && !loading) {
         setFilterExpanded(true)
         // close all others
         setTaxonomiesExpanded(false)
         setPropertiesExpanded(false)
-      } else {
+      } else if (!loading) {
         setFilterExpanded(false)
         onSetMessage('Bitte wählen Sie mindestens eine Taxonomie')
+      } else {
+        setFilterExpanded(false)
+        onSetMessage('Bitte warten Sie, bis die Daten geladen sind')
       }
     },
     onToggleProperties: ({
       exportTaxonomiesData,
+      propsByTaxData,
       propertiesExpanded,
       setTaxonomiesExpanded,
       setFilterExpanded,
@@ -117,14 +134,22 @@ const enhance = compose(
       onSetMessage,
     }) => () => {
       const exportTaxonomies = get(exportTaxonomiesData, 'exportTaxonomies', [])
-      if (!propertiesExpanded && exportTaxonomies.length > 0) {
+      const loading = exportRcoData.loading ||
+        propsByTaxData.loading ||
+        exportObjectData.loading ||
+        exportPcoData.loading ||
+        synonymData.loading
+      if (!propertiesExpanded && exportTaxonomies.length > 0 && !loading) {
         setPropertiesExpanded(true)
         // close all others
         setTaxonomiesExpanded(false)
         setFilterExpanded(false)
-      } else {
+      } else if (!loading) {
         setPropertiesExpanded(false)
         onSetMessage('Bitte wählen Sie mindestens eine Gruppe')
+      } else {
+        setPropertiesExpanded(false)
+        onSetMessage('Bitte warten Sie, bis die Daten geladen sind')
       }
     },
   })
@@ -146,7 +171,7 @@ const Export = ({
   onToggleFilter: () => {},
   onToggleProperties: () => {},
   message: String,
-}) => (
+}) =>
   <ErrorBoundary>
     <Container>
       <StyledCard>
@@ -203,6 +228,5 @@ const Export = ({
       <StyledSnackbar open={!!message} message={message} />
     </Container>
   </ErrorBoundary>
-)
 
 export default enhance(Export)

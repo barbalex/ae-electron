@@ -18,9 +18,8 @@ export default ({
   exportWithSynonymData,
   exportPcoProperties,
   pco,
-  synonymPco,
   rco,
-  synonymRco,
+  synonyms,
   exportRcoPropertyNames,
   exportRcoProperties,
   exportIds,
@@ -32,9 +31,8 @@ export default ({
   exportWithSynonymData: Boolean,
   exportPcoProperties: Array<Object>,
   pco: Array<Object>,
-  synonymPco: Array<Object>,
   rco: Array<Object>,
-  synonymRco: Array<Object>,
+  synonyms: Array<Object>,
   exportRcoPropertyNames: Boolean,
   exportRcoProperties: Array<Object>,
   exportIds: Array<String>,
@@ -42,8 +40,13 @@ export default ({
   exportRcoInOneRow: Boolean,
 }) => {
   // need taxFields to filter only data with properties
-  const taxFields = ['id']
+  const taxFields = [
+    'id',
+    ...exportTaxProperties
+      .map(p => `${conv(p.taxname)}__${conv(p.pname)}`)
+  ]
   const aditionalRows = []
+  //console.log('rowsFromObjects 1:',{exportRcoInOneRow,exportRcoProperties,exportOnlyRowsWithProperties})
   let rows = objects.map(o => {
     // 1. object
     const row = {}
@@ -58,85 +61,82 @@ export default ({
           val = properties[p.pname]
         }
       }
-      taxFields.push(`${conv(p.taxname)}__${conv(p.pname)}`)
-      return (row[`${conv(p.taxname)}__${conv(p.pname)}`] = val)
+      const fieldName = `${conv(p.taxname)}__${conv(p.pname)}`
+      row[fieldName] = val
     })
+    const thisObjectsSynonyms = [
+      // itself
+      o.id,
+      // all declared synonyms
+      // but only if synonyms data is wanted
+      ...synonyms
+        .filter(s => exportWithSynonymData && s.objectId === o.id)
+        .map(s => s.objectIdSynonym)
+    ]
     // 2. pco
-    const thisObjectsPco = pco.filter(p => p.objectId === o.id)
-    const thisObjectsSynonymPco = synonymPco.filter(p => p.objectId === o.id)
-    const pcoToUse = [...thisObjectsPco]
-    if (exportWithSynonymData) {
-      thisObjectsSynonymPco.forEach(sPco => {
-        // add if not yet contained
-        const idContained = pcoToUse.find(pco => pco.id === sPco.id)
-        if (!idContained) pcoToUse.push(sPco)
+    if (exportPcoProperties.length > 0) {
+      const thisObjectsPco = pco.filter(p => thisObjectsSynonyms.includes(p.objectId))
+      thisObjectsPco.forEach(pco => {
+        const pcoProperties = JSON.parse(pco.properties)
+        if (pcoProperties) {
+          exportPcoProperties.forEach(p => {
+            if (pcoProperties[p.pname] !== undefined) {
+              let val = pcoProperties[p.pname]
+              if (typeof val === 'boolean') {
+                val = booleanToJaNein(val)
+              }
+              row[`${conv(p.pcname)}__${conv(p.pname)}`] = val
+            }
+          })
+        }
+      })
+      // add every field if still missing
+      exportPcoProperties.forEach(p => {
+        const fieldName = `${conv(p.pcname)}__${conv(p.pname)}`
+        if (row[fieldName] === undefined) {
+          row[fieldName] = null
+        }
       })
     }
-    pcoToUse.forEach(pco => {
-      const pcoProperties = JSON.parse(pco.properties)
-      if (pcoProperties) {
-        exportPcoProperties.forEach(p => {
-          if (pcoProperties[p.pname] !== undefined) {
-            let val = pcoProperties[p.pname]
-            if (typeof val === 'boolean') {
-              val = booleanToJaNein(val)
-            }
-            row[`${conv(p.pcname)}__${conv(p.pname)}`] = val
-          }
+    // 3. rco
+    if (exportRcoProperties.length > 0) {
+      const thisObjectsRco = rco.filter(p => thisObjectsSynonyms.includes(p.objectId))
+      //console.log('rowsFromObjects:',{thisObjectsRco,row})
+
+      /**
+       * add all relations comma separated
+       * need to group by relationtype
+       *
+       * TODO:
+       * choose to add new row, depending on setting?
+       * but then need to make shure only one relationCollection exists
+       */
+      if (exportRcoInOneRow) {
+        rowsFromObjectsRcoSingleRow({
+          thisObjectsRco,
+          exportRcoProperties,
+          row,
+        })
+      } else {
+        rowsFromObjectsRcoMultipleRows({
+          thisObjectsRco,
+          exportRcoProperties,
+          row,
+          aditionalRows,
         })
       }
-    })
-    // add every field if still missing
-    exportPcoProperties.forEach(p => {
-      if (row[`${conv(p.pcname)}__${conv(p.pname)}`] === undefined) {
-        row[`${conv(p.pcname)}__${conv(p.pname)}`] = null
-      }
-    })
-    // 3. rco
-    const thisObjectsRco = rco.filter(p => p.objectId === o.id)
-    const thisObjectsSynonymRco = synonymRco.filter(p => p.objectId === o.id)
-    const rcoToUse = [...thisObjectsRco]
-    if (exportWithSynonymData) {
-      thisObjectsSynonymRco.forEach(sRco => {
-        // add if not yet contained
-        const idContained = rcoToUse.find(rco => rco.id === sRco.id)
-        if (!idContained) rcoToUse.push(sRco)
-      })
-    }
-
-    /**
-     * add all relations comma separated
-     * need to group by relationtype
-     *
-     * TODO:
-     * choose to add new row, depending on setting?
-     * but then need to make shure only one relationCollection exists
-     */
-    if (exportRcoInOneRow) {
-      rowsFromObjectsRcoSingleRow({
-        rcoToUse,
-        exportRcoProperties,
-        row,
-      })
-    } else {
-      rowsFromObjectsRcoMultipleRows({
-        rcoToUse,
-        exportRcoProperties,
-        row,
-        aditionalRows,
-      })
     }
     return row
   })
   rows = [...rows, ...aditionalRows]
-  rows = rows.filter(r => {
-    if (exportIds.length > 0) return exportIds.includes(r.id)
-    return true
-  })
+  if (exportIds.length > 0) {
+    rows = rows.filter(r => exportIds.includes(r.id))
+  }
   // sort by id
   // reason: if multiple rows were created per object,
   // they will be next to each other
   rows = sortBy(rows, 'id')
+  //console.log('rowsFromObjects 2:',{rows:[...rows]})
 
   const fields = rows[0] ? Object.keys(rows[0]).map(k => k) : []
   const propertyFields = fields.filter(f => !taxFields.includes(f))
@@ -155,5 +155,6 @@ export default ({
     resizable: true,
     sortable: true,
   }))
+  //console.log('rowsFromObjects 3:',{rows:[...rows], pvColumns,propertyFields,fields,taxFields})
   return { rows, pvColumns }
 }

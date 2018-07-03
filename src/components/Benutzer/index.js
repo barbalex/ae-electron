@@ -1,10 +1,12 @@
 // @flow
 import React, { Component } from 'react'
-import TextField from 'material-ui/TextField'
-import { FormControl, FormHelperText } from 'material-ui/Form'
-import Button from 'material-ui/Button'
-import Paper from 'material-ui/Paper'
-import Tabs, { Tab } from 'material-ui/Tabs'
+import TextField from '@material-ui/core/TextField'
+import FormHelperText from '@material-ui/core/FormHelperText'
+import FormControl from '@material-ui/core/FormControl'
+import Button from '@material-ui/core/Button'
+import Paper from '@material-ui/core/Paper'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -12,9 +14,8 @@ import withHandlers from 'recompose/withHandlers'
 import { withApollo } from 'react-apollo'
 import get from 'lodash/get'
 
-import loginData from '../../modules/loginData'
 import activeNodeArrayData from '../../modules/activeNodeArrayData'
-import userData from './userData'
+import fetchData from './data'
 import treeData from '../Tree/treeData'
 import Roles from './Roles'
 import PCs from './PCs'
@@ -34,11 +35,6 @@ const SaveButton = styled(Button)`
 const StyledPaper = styled(Paper)`
   background-color: #ffcc80 !important;
 `
-const StyledTabs = styled(Tabs)`
-  .indicator {
-    height: 3px;
-  }
-`
 
 const enhance = compose(
   withApollo,
@@ -49,8 +45,7 @@ const enhance = compose(
     },
   }),
   activeNodeArrayData,
-  loginData,
-  userData,
+  fetchData,
   treeData
 )
 
@@ -64,8 +59,7 @@ type State = {
 
 type Props = {
   client: Object,
-  loginData: Object,
-  userData: Object,
+  data: Object,
   treeData: Object,
   tab: Number,
   setTab: () => void,
@@ -74,17 +68,21 @@ type Props = {
 }
 
 class User extends Component<Props, State> {
-  state = {
-    name: '',
-    nameErrorText: '',
-    emailErrorText: '',
-    email: '',
-    passNew: '',
+  constructor(props) {
+    super(props)
+    const user = get(props.data, 'userById', {})
+    this.state = {
+      name: user.name,
+      nameErrorText: '',
+      email: user.email,
+      emailErrorText: '',
+      passNew: '',
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const propsUser = get(this.props.userData, 'userById', {})
-    const prevPropsUser = get(prevProps.userData, 'userById', {})
+    const propsUser = get(this.props.data, 'userById', {})
+    const prevPropsUser = get(prevProps.data, 'userById', {})
 
     if (
       !!propsUser &&
@@ -108,8 +106,8 @@ class User extends Component<Props, State> {
 
   onSave = async () => {
     const { name: username, email, passNew } = this.state
-    const { userData, treeData, client } = this.props
-    const id = get(userData, 'userById.id')
+    const { data, treeData, client } = this.props
+    const id = get(data, 'userById.id')
     const variables = passNew
       ? {
           username,
@@ -140,7 +138,7 @@ class User extends Component<Props, State> {
       return console.log(error)
     }
     // refetch to update
-    userData.refetch()
+    data.refetch()
     treeData.refetch()
     this.setState({
       nameErrorText: '',
@@ -151,23 +149,22 @@ class User extends Component<Props, State> {
 
   render() {
     const {
-      userData,
-      loginData,
+      data,
       tab,
       onChangeTab,
       dimensions: { width },
     } = this.props
     const { name, nameErrorText, emailErrorText, email, passNew } = this.state
-    const loginUsername = get(loginData, 'login.username')
-    const user = get(userData, 'userById', {})
+    const loginUsername = get(data, 'login.username')
+    const user = get(data, 'userById', {})
     const orgUsers = get(user, 'organizationUsersByUserId.nodes', [])
     const pcs = get(user, 'propertyCollectionsByImportedBy.nodes', [])
     const tcs = get(user, 'taxonomiesByImportedBy.nodes', [])
     const saveEnabled =
-      !userData.loading &&
+      !data.loading &&
       (passNew ||
-        ((!!name && !!userData && !!user && name !== user.name) ||
-          (!!email && !!userData && !!user && email !== user.email)))
+        ((!!name && !!data && !!user && name !== user.name) ||
+          (!!email && !!data && !!user && email !== user.email)))
     const userIsLoggedIn =
       !!user && !!loginUsername && user.name === loginUsername
 
@@ -227,11 +224,11 @@ class User extends Component<Props, State> {
             </SaveButton>
           </OrgContainer>
           <StyledPaper>
-            <StyledTabs
+            <Tabs
               centered={width > 779}
               value={tab}
               onChange={onChangeTab}
-              indicatorColor="#E65100"
+              indicatorColor="primary"
               scrollable={width <= 779}
               scrollButtons="auto"
             >
@@ -240,7 +237,7 @@ class User extends Component<Props, State> {
               <Tab
                 label={`importierte Eigenschaften-Sammlungen (${pcs.length})`}
               />
-            </StyledTabs>
+            </Tabs>
           </StyledPaper>
           {tab === 0 && <Roles orgUsers={orgUsers} />}
           {tab === 1 && <TCs tcs={tcs} />}

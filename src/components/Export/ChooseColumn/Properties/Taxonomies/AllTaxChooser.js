@@ -1,7 +1,7 @@
 //@flow
 import React from 'react'
-import { FormControlLabel } from 'material-ui/Form'
-import Checkbox from 'material-ui/Checkbox'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Checkbox from '@material-ui/core/Checkbox'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -27,18 +27,19 @@ const enhance = compose(
   withApollo,
   exportTaxPropertiesData,
   withHandlers({
-    onCheck: ({ properties, client }) => (event, isChecked) => {
+    onCheck: ({ properties, client }) => async (event, isChecked) => {
       const mutation = isChecked
         ? addExportTaxPropertyMutation
         : removeExportTaxPropertyMutation
-      properties.forEach(p => {
-        const taxname = p.taxonomyName
-        const pname = p.propertyName
+      for (let p of properties) {
         client.mutate({
           mutation,
-          variables: { taxname, pname },
+          variables: {
+            taxname: p.taxonomyName,
+            pname: p.propertyName 
+          },
         })
-      })
+      }
     },
   })
 )

@@ -1,7 +1,8 @@
 // @flow
 import React, { Fragment } from 'react'
-import Paper from 'material-ui/Paper'
-import Tabs, { Tab } from 'material-ui/Tabs'
+import Paper from '@material-ui/core/Paper'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -13,11 +14,6 @@ import PreviewColumn from './PreviewColumn'
 
 const StyledPaper = styled(Paper)`
   background-color: #ffcc80 !important;
-`
-const StyledTabs = styled(Tabs)`
-  .indicator {
-    height: 3px;
-  }
 `
 const StyledSwipeableViews = styled(SwipeableViews)`
   height: 100%;
@@ -53,15 +49,15 @@ const ExportStacked = ({
   return (
     <Fragment>
       <StyledPaper>
-        <StyledTabs
+        <Tabs
           centered
           value={tab}
           onChange={onChangeTab}
-          indicatorColor="#E65100"
+          indicatorColor="primary"
         >
           <Tab label="Auswählen" />
           <Tab label="Vorschau" />
-        </StyledTabs>
+        </Tabs>
       </StyledPaper>
       <StyledSwipeableViews axis="x" index={tab} onChangeIndex={i => setTab(i)}>
         <ChooseColumn dimensions={{ width: windowWidth }} />

@@ -1,10 +1,11 @@
 // @flow
 import React from 'react'
-import Card, { CardActions } from 'material-ui/Card'
-import Collapse from 'material-ui/transitions/Collapse'
-import IconButton from 'material-ui/IconButton'
-import Icon from 'material-ui/Icon'
-import ExpandMoreIcon from 'material-ui-icons/ExpandMore'
+import Card from '@material-ui/core/Card'
+import CardActions from '@material-ui/core/CardActions'
+import Collapse from '@material-ui/core/Collapse'
+import IconButton from '@material-ui/core/IconButton'
+import Icon from '@material-ui/core/Icon'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import styled from 'styled-components'
 import { withApollo } from 'react-apollo'
 import get from 'lodash/get'
@@ -19,8 +20,10 @@ import exportTaxonomiesData from '../../../exportTaxonomiesData'
 import data from '../data'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 
-const StyledCard = styled(Card)`
+const Container = styled.div`
   margin: 10px 0;
+`
+const StyledCard = styled(Card)`
   background-color: rgb(255, 243, 224) !important;
 `
 const StyledCardActions = styled(CardActions)`
@@ -84,40 +87,42 @@ const Properties = ({
 
   return (
     <ErrorBoundary>
-      <StyledCard>
-        <StyledCardActions disableActionSpacing onClick={onToggleTaxonomies}>
-          <CardActionTitle>
-            Taxonomien{taxCount > 0 && (
-              <Count>{`(${taxCount} ${
-                taxCount === 1 ? 'Taxonomie' : 'Taxonomien'
-              }, ${taxFieldsCount} ${
-                taxFieldsCount === 1 ? 'Feld' : 'Felder'
-              })`}</Count>
+      <Container>
+        <StyledCard>
+          <StyledCardActions disableActionSpacing onClick={onToggleTaxonomies}>
+            <CardActionTitle>
+              Taxonomien{taxCount > 0 && (
+                <Count>{`(${taxCount} ${
+                  taxCount === 1 ? 'Taxonomie' : 'Taxonomien'
+                }, ${taxFieldsCount} ${
+                  taxFieldsCount === 1 ? 'Feld' : 'Felder'
+                })`}</Count>
+              )}
+            </CardActionTitle>
+            <CardActionIconButton
+              data-expanded={taxonomiesExpanded}
+              aria-expanded={taxonomiesExpanded}
+              aria-label="Show more"
+            >
+              <Icon>
+                <ExpandMoreIcon />
+              </Icon>
+            </CardActionIconButton>
+          </StyledCardActions>
+          <Collapse in={taxonomiesExpanded} timeout="auto" unmountOnExit>
+            {jointTaxProperties.length > 0 && (
+              <JointTaxonomy jointTaxProperties={jointTaxProperties} />
             )}
-          </CardActionTitle>
-          <CardActionIconButton
-            data-expanded={taxonomiesExpanded}
-            aria-expanded={taxonomiesExpanded}
-            aria-label="Show more"
-          >
-            <Icon>
-              <ExpandMoreIcon />
-            </Icon>
-          </CardActionIconButton>
-        </StyledCardActions>
-        <Collapse in={taxonomiesExpanded} timeout="auto" unmountOnExit>
-          {jointTaxProperties.length > 0 && (
-            <JointTaxonomy jointTaxProperties={jointTaxProperties} />
-          )}
-          {Object.keys(taxPropertiesByTaxonomy).map(tax => (
-            <Taxonomy
-              key={tax}
-              tax={tax}
-              initiallyExpanded={initiallyExpanded}
-            />
-          ))}
-        </Collapse>
-      </StyledCard>
+            {Object.keys(taxPropertiesByTaxonomy).map(tax => (
+              <Taxonomy
+                key={tax}
+                tax={tax}
+                initiallyExpanded={initiallyExpanded}
+              />
+            ))}
+          </Collapse>
+        </StyledCard>
+      </Container>
     </ErrorBoundary>
   )
 }

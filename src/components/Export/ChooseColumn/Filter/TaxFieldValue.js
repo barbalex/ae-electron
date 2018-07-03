@@ -3,10 +3,10 @@ import React from 'react'
 import Autosuggest from 'react-autosuggest'
 import match from 'autosuggest-highlight/match'
 import parse from 'autosuggest-highlight/parse'
-import TextField from 'material-ui/TextField'
-import Paper from 'material-ui/Paper'
-import { MenuItem } from 'material-ui/Menu'
-import { withStyles } from 'material-ui/styles'
+import TextField from '@material-ui/core/TextField'
+import Paper from '@material-ui/core/Paper'
+import MenuItem from '@material-ui/core/MenuItem'
+import { withStyles } from '@material-ui/core/styles'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -81,13 +81,6 @@ const styles = theme => ({
     position: 'relative',
     height: 200,
   },
-  suggestionsContainerOpen: {
-    position: 'absolute',
-    marginTop: theme.spacing.unit,
-    marginBottom: theme.spacing.unit * 3,
-    left: 0,
-    right: 0,
-  },
   suggestion: {
     display: 'block',
   },
@@ -122,19 +115,23 @@ type Props = {
   dataFetched: Boolean,
   setDataFetched: () => void,
   exportAddFilterFieldsData: Object,
+  width: Number,
 }
 
 type State = {
-  suggestions: Array<string>,
-  propValues: Array<string>,
+  suggestions: Array<String>,
+  propValues: Array<String>,
   value: string,
 }
 
 class IntegrationAutosuggest extends React.Component<Props, State> {
-  state = {
-    suggestions: [],
-    propValues: [],
-    value: '',
+  constructor(props) {
+    super(props)
+    this.state = {
+      suggestions: [],
+      propValues: [],
+      value: props.value || '',
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -149,7 +146,6 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
       const propValues = get(propData, 'propValuesFunction.nodes', [])
         .filter(v => v !== null && v !== undefined)
         .map(v => v.value)
-        .filter(v => v !== null && v !== undefined)
       if (propValues.length > 0) {
         this.setState({ propValues })
         setFetchData(false)
@@ -185,36 +181,42 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
     if (!dataFetched) setFetchData(true)
   }
 
-  change = newValue => {
-    const { taxname, pname, comparator, client } = this.props
+  handleChange = (event, { newValue }) => {
+    // trim the start to enable entering space
+    // at start to open list
+    const value = trimStart(newValue)
+    this.setState({ value })
+  }
+
+  handleBlur = () => {
+    const {
+      taxname,
+      pname,
+      comparator,
+      client,
+      exportAddFilterFieldsData
+    } = this.props
+    const { value } = this.state
+    // 1. change filter value
     let comparatorValue = comparator
-    if (!comparator && newValue) comparatorValue = 'ILIKE'
-    if (!newValue) comparatorValue = null
+    if (!comparator && value) comparatorValue = 'ILIKE'
+    if (!value) comparatorValue = null
     client.mutate({
       mutation: exportTaxFiltersMutation,
       variables: {
         taxname,
         pname,
         comparator: comparatorValue,
-        value: newValue,
+        value,
       },
     })
-  }
-
-  handleChange = (event, { newValue }) => {
-    const { taxname, pname, client, exportAddFilterFieldsData } = this.props
-    // trim the start to enable entering space
-    // at start to open list
-    const value = trimStart(newValue)
-    this.setState({ value })
-    this.change(value)
-    // TODO: if value and not choosen, choose
+    // 2. if value and field not choosen, choose it
     const exportAddFilterFields = get(
       exportAddFilterFieldsData,
       'exportAddFilterFields',
       true
     )
-    if (exportAddFilterFields) {
+    if (exportAddFilterFields && value) {
       client.mutate({
         mutation: addExportTaxPropertyMutation,
         variables: { taxname, pname },
@@ -223,7 +225,8 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
   }
 
   renderInput = inputProps => {
-    const { classes, pname, jsontype, value } = this.props
+    const { classes, pname, jsontype } = this.props
+    const { value } = this.state
     const labelText = `${pname} (${readableType(jsontype)})`
     const { autoFocus, ref, ...other } = inputProps
 
@@ -244,16 +247,25 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, width } = this.props
     const { suggestions } = this.state
+    const { container, suggestionsList, suggestion } = classes
 
     return (
       <Autosuggest
         theme={{
-          container: classes.container,
-          suggestionsContainerOpen: classes.suggestionsContainerOpen,
-          suggestionsList: classes.suggestionsList,
-          suggestion: classes.suggestion,
+          container: container,
+          suggestionsContainerOpen: {
+            position: 'absolute',
+            marginTop: 8,
+            marginBottom: 8 * 3,
+            left: 0,
+            right: 0,
+            // minWidth: that of parent
+            minWidth: width
+          },
+          suggestionsList: suggestionsList,
+          suggestion: suggestion,
         }}
         renderInputComponent={this.renderInput}
         suggestions={suggestions}
@@ -268,6 +280,7 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
           autoFocus: true,
           placeholder: 'Für Auswahlliste: Leerschlag tippen',
           onChange: this.handleChange,
+          onBlur: this.handleBlur,
           onFocus: this.onFocus,
         }}
       />
