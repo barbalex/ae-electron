@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, Menu } = require('electron')
 const path = require('path')
 const url = require('url')
 
@@ -27,6 +27,9 @@ function createWindow() {
       slashes: true,
     })
   win.loadURL(startUrl)
+
+  // hide menu
+  Menu.setApplicationMenu(null)
 
   // Emitted when the window is closed.
   win.on('closed', () => {
