@@ -28,7 +28,7 @@ Inspired by [React Bits](https://www.youtube.com/watch?v=JrARTsX2RM0).
 - Open links in Browser instead of new electron window?
 
 ### How to update from main repository (ae2)
-1. in apflora: move all .graphql calls to gql``
+1. move all .graphql calls to gql`` (done)
 1. in ae2: update version in `package.json` and `src/components/AppBar/MoreMenu.js`
 1. switch to ae-electron
 1. package.json: replace dependencies and resolutions with values from ae2
@@ -53,7 +53,7 @@ Inspired by [React Bits](https://www.youtube.com/watch?v=JrARTsX2RM0).
   - `yarn`
 1. Enable logging: uncomment `win.openDevTools()` in `main.js`
 1. Run dev mode: `yarn dev` and test
-1. Build `run ebuild`
+1. Build `yarn ebuild`
 1. Set graphQlUri to `https://arteigenschaften.ch/graphql` in `src/modules/graphQlUri`
 1. Test if dynamic imports for exports work (apflora)
 

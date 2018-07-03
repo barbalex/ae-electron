@@ -1,2 +1,2 @@
 // @flow
-export default () => 'https://artdaten.ch/graphql'
+export default () => 'https://arteigenschaften.ch/graphql'
