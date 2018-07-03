@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@heroku/foreman": "2.0.2",
-    "electron": "1.8.4",
+    "electron": "2.0.3",
     "electron-builder": "20.8.1",
     "flow-bin": "0.75.0",
     "react-scripts": "1.1.4",
